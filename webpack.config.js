@@ -48,6 +48,13 @@ module.exports = {
             {
                 test: /\.scss$/,
                 loader: 'style!css!sass'
+            },
+            {
+                test: /\.css$/,
+                loader: 'style!css'
+            }, {
+                test: /\.(png|svg)(\?.*$|$)/,
+                loader: "url-loader"
             }
         ]
     }

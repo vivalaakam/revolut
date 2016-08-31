@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="143px"
+   height="139px"
+   viewBox="0 0 143 139"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="rotate.svg">
+  <metadata
+     id="metadata21">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="698"
+     id="namedview19"
+     showgrid="false"
+     inkscape:zoom="1.6978417"
+     inkscape:cx="61.192797"
+     inkscape:cy="69.5"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title4">g7518</title>
+  <desc
+     id="desc6">Created with Sketch.</desc>
+  <defs
+     id="defs8" />
+  <g
+     id="Desktop"
+     transform="matrix(0.92528081,0,0,0.94050356,13.784874,11.840287)"
+     style="fill:none;fill-rule:evenodd;stroke:none;stroke-width:1">
+    <g
+       id="Revolut-promo-page----desktop-1"
+       transform="translate(-578,-596)">
+      <g
+         id="g7518"
+         transform="translate(580,598)">
+        <polyline
+           id="path7504"
+           points="139.101364 55.0848533 118.474698 77.9826305 102.268203 51.7727167"
+           style="stroke:#0b80d4;stroke-width:4" />
+        <path
+           d="M 118.56899,77.978802 C 126.67463,45.912819 107.73754,12.513846 75.669161,4.4034187"
+           id="path7508"
+           inkscape:connector-curvature="0"
+           style="stroke:#0b80d4;stroke-width:4" />
+        <polyline
+           id="path7512"
+           points="32.8428029 135.470697 21.3292989 106.88198 51.995281 103.833091"
+           style="stroke:#0b80d4;stroke-width:4" />
+        <path
+           d="m 21.345572,106.89299 c 25.243077,21.37094 63.521708,19.09504 84.890258,-6.15043"
+           id="path7516"
+           inkscape:connector-curvature="0"
+           style="stroke:#0b80d4;stroke-width:4" />
+        <polyline
+           id="path7520"
+           points="10.7692308 0 41.2629052 4.4728204 28.4307688 32.4895718"
+           style="stroke:#0b80d4;stroke-width:4" />
+        <path
+           d="M 40.989845,4.3890597 C 9.8069402,15.411965 -7.2778457,49.705982 3.7474532,80.888887"
+           id="path7524"
+           inkscape:connector-curvature="0"
+           style="stroke:#0b80d4;stroke-width:4" />
+      </g>
+    </g>
+  </g>
+</svg>

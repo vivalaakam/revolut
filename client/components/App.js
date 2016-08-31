@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import MaskedInput from 'react-maskedinput';
+import classnames from 'classnames';
 import Input from './Input';
 export default class App extends Component {
     constructor(props) {
@@ -42,44 +43,74 @@ export default class App extends Component {
 
     render() {
         const {user} = this.props;
+        const state = classnames('State', {
+            State_inProgress: user.state === 'in_progress',
+            State_success: user.state === 'success',
+            State_failure: user.state === 'failure'
+        });
+
         return (
-            <div>
-                <div className="wrapper">
-                    <div className="row">
-                        <MaskedInput mask="11.11.1111" name="expiry" placeholder="DD.MM.YYYY"
-                                     onChange={::this.changeDate}/>
+            <div className="Container">
+                <div className="Container-wrapper">
+                    <div className="Logo">
+                        <div className="Row">
+                            We have an astro sign
+                            present for you!
+                        </div>
                     </div>
-                    <div className="row">
-                        <span>{user.state}</span>
-                        <span>
-                            {user.state ? user.progress : ''}
-                        </span>
+                    <div className="Row Birth">
+                        <div className="Row Text">
+                            Input your date of birth
+                        </div>
+                        <div className="Row">
+                            <MaskedInput mask="11.11.1111"
+                                         className={classnames('Input', {Error: this.getError('birthday')})}
+                                         name="expiry" placeholder="DD.MM.YYYY"
+                                         onChange={::this.changeDate}/>
+                        </div>
                     </div>
-                    <div className="row">
-                        http://r.revolut/<span>capricorn</span>/<span>{this.getUserName()}</span>
+
+
+                    <div className="Row Url">
+                        http://r.revolut/<span className="Url-gray">capricorn</span>/<span
+                        className="Url-gray">{this.getUserName()}</span>
                     </div>
-                    <div className="form">
-                        <div className="row">
+                    <div className="Row Progress">
+                        <div className={state}>
+                            {user.state && user.state === 'in_progress' ? user.progress : ''}
+                        </div>
+                    </div>
+                    <div className="Form">
+                        <div className="Row Text">
+                            Fill in the registration form
+                        </div>
+                        <div className="Row">
                             <Input name="firstName" onChange={::this.updateUser} placeholder="First Name"
                                    error={this.getError('firstName')}/>
                         </div>
-                        <div className="row">
+                        <div className="Row">
                             <Input name="lastName" onChange={::this.updateUser} placeholder="Last Name"
                                    error={this.getError('lastName')}/>
                         </div>
-                        <div className="row">
+                        <div className="Row">
                             <Input name="username" onChange={::this.changeUsername} placeholder="Username"
                                    error={this.getError('username')}/>
                         </div>
-                        <div className="row">
+                        <div className="Row">
                             <Input name="phone" onChange={::this.changePhone} placeholder="Phone No"
                                    error={this.getError('phone')}/>
                         </div>
-                        <div className="row">
-                            <button onClick={::this.submit}>
+                        <div className="Row">
+                            <button className="Submit" onClick={::this.submit}>
                                 Submit
                             </button>
                         </div>
+                    </div>
+                </div>
+                <div className="Container-back">
+                    <div className="Row">
+                        The new fair way to instantly
+                        send and spend money
                     </div>
                 </div>
             </div>
