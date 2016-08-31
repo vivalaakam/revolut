@@ -3,8 +3,16 @@ var app = express();
 var webpack = require('webpack');
 var config = require('./webpack.config');
 var path = require('path');
+var moment = require('moment');
+var getSign = require('horoscope').getSign;
 
 var compiler = webpack(config);
+
+var bodyParser = require('body-parser')
+app.use(bodyParser.json());       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+}));
 
 app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
@@ -48,6 +56,13 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.post('/astrosign', function (req, res) {
+    var birth = moment(req.body.birthday, 'DD.MM.YYYY');
+    var astrosign = getSign({month: birth.get('month') + 1, day: birth.get('date')});
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({astrosign: astrosign.toLowerCase()}));
+});
+
 app.get('/:astrosign/:username', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
@@ -64,6 +79,12 @@ app.get('/:astrosign/:username', function (req, res) {
     progress = 0;
     res.send(JSON.stringify({token: getNewToken()}));
     incProgress(true);
+});
+
+app.post('/:astrosign/:username', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({state: 'saved'}));
+
 });
 
 app.listen(3000, function () {

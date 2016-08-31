@@ -22,8 +22,16 @@ export default class App extends Component {
         this.props.actions.setPhone(value);
     }
 
+    checkUser() {
+        this.props.actions.check();
+    }
+
     getUserName() {
         return this.props.user.username || 'username';
+    }
+
+    getAstrosign() {
+        return this.props.user.astrosign || 'astrosign';
     }
 
     updateUser(e) {
@@ -36,9 +44,10 @@ export default class App extends Component {
         return this.props.user.errors[field] || false;
     }
 
-    submit() {
-        let {actions, user} = this.props;
-        actions.submitUser(user);
+    submit(e) {
+        e.preventDefault();
+        let {actions} = this.props;
+        actions.submitUser();
     }
 
     formEntry() {
@@ -56,7 +65,8 @@ export default class App extends Component {
                            error={this.getError('lastName')}/>
                 </div>
                 <div className="Row">
-                    <Input name="username" onChange={::this.changeUsername} placeholder="Username"
+                    <Input name="username" onChange={::this.changeUsername} onBlur={::this.checkUser}
+                           placeholder="Username"
                            error={this.getError('username')}/>
                 </div>
                 <div className="Row">
@@ -85,9 +95,9 @@ export default class App extends Component {
     render() {
         const {user} = this.props;
         const state = classnames('State', {
-            State_inProgress: user.state === 'in_progress',
-            State_success: user.state === 'success',
-            State_failure: user.state === 'failure'
+            State_inProgress: user.can_login === 'in_progress',
+            State_success: user.can_login === 'success',
+            State_failure: user.can_login === 'failure'
         });
 
         return (
@@ -107,22 +117,23 @@ export default class App extends Component {
                             <MaskedInput mask="11.11.1111"
                                          className={classnames('Input', {Error: this.getError('birthday')})}
                                          name="expiry" placeholder="DD.MM.YYYY"
-                                         onChange={::this.changeDate}/>
+                                         onChange={::this.changeDate}
+                                         onBlur={::this.checkUser}/>
                         </div>
                     </div>
 
 
                     <div className="Row Url">
-                        http://r.revolut/<span className="Url-gray">capricorn</span>/<span
+                        http://r.revolut/<span className="Url-gray">{this.getAstrosign()}</span>/<span
                         className="Url-gray">{this.getUserName()}</span>
                     </div>
                     <div className="Row Progress">
                         <div className={state}>
-                            {user.state && user.state === 'in_progress' ? user.progress : ''}
+                            {user.can_login && user.can_login === 'in_progress' ? user.progress : ''}
                         </div>
                     </div>
                     <div className="Form">
-                        {user.state === 'success' ? this.formSuccess() : this.formEntry() }
+                        {user.state === 'saved' ? this.formSuccess() : this.formEntry() }
                     </div>
                 </div>
                 <div className="Container-back">

@@ -1,4 +1,4 @@
-import {watchBirthday, watchUsername, watchPhone, watchUser, watchSubmitUser} from '../reducers/user';
+import {watchBirthday, watchUsername, watchPhone, watchUser, watchSubmitUser, watchCheckUser} from '../reducers/user';
 
 export default function* rootSaga() {
     yield [
@@ -6,6 +6,7 @@ export default function* rootSaga() {
         watchBirthday(),
         watchUsername(),
         watchPhone(),
-        watchUser()
+        watchUser(),
+        watchCheckUser()
     ]
 }
