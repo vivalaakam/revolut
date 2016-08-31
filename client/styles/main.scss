@@ -29,22 +29,8 @@ html, body, #root {
   bottom: 0px;
   height: 790px;
   z-index: -1;
-  /* bg: */
-  background-image: radial-gradient(51% 14%, #05D2F5 0%, #0D6FCD 100%);
-
-  border-top-left-radius: 50% 100px;
-  border-top-right-radius: 50% 100px;
   overflow: hidden;
-
-  &:before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0px;
-    bottom: 0px;
-    background-image: linear-gradient(15deg, rgba(12, 183, 255, 0.00) 44%, #D51BA3 100%);
-  }
+  background: url('../images/bg.svg');
 
   .Row {
     width: 640px;
@@ -226,7 +212,7 @@ html, body, #root {
 
 .Success {
   position: relative;
-  height:100%;
+  height: 100%;
   &:after {
     content: '';
     position: absolute;
