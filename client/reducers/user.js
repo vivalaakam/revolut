@@ -1,8 +1,7 @@
 import {put, call} from 'redux-saga/effects';
-import {takeEvery} from 'redux-saga'
+import {takeEvery, delay} from 'redux-saga';
 
 import moment from 'moment';
-
 
 const SET_BIRTHDAY = 'user/SET_BIRTHDAY';
 const SET_USERNAME = 'user/SET_USERNAME';
@@ -13,6 +12,8 @@ const UPDATE_USER = 'user/UPDATE_USER';
 const VALIDATE_USER = 'user/VALIDATE_USER';
 const SUBMIT_USER = 'user/SUBMIT_USER';
 
+const STATE_USER = 'user/STATE_USER';
+
 const FIELDS = ['birthday', 'username', 'firstName', 'lastName', 'phone'];
 
 const $$initialState = {
@@ -21,6 +22,8 @@ const $$initialState = {
     firstName: '',
     lastName: '',
     phone: '',
+    state: null,
+    progress: 0,
     errors: {}
 };
 
@@ -168,11 +171,26 @@ export function* submit({payload}) {
 }
 
 function* submitData(data) {
-    console.log(data);
+    yield put(updateUser({state: 'in_progress'}));
+    let {token} = yield fetch(`/astrosign/${data.username}`).then(data => data.json());
+
+    yield call(progressSubmit, token, data)
+}
+
+function* progressSubmit(token, data) {
+    let {progress, available} = yield fetch(`/astrosign/${data.username}?token=${token}`).then(data => data.json());
+
+    if (progress === 100) {
+        yield put(updateUser({progress: progress, state: available ? 'success' : 'failure'}));
+    } else {
+        yield put(updateUser({progress: progress}));
+        yield delay(1000 * Math.random());
+        yield call(progressSubmit, token, data)
+    }
 }
 
 export function* watchSubmitUser() {
-    yield * takeEvery(SUBMIT_USER, submit);
+    yield* takeEvery(SUBMIT_USER, submit);
 }
 
 export function* watchUser() {

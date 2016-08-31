@@ -41,12 +41,19 @@ export default class App extends Component {
     }
 
     render() {
+        const {user} = this.props;
         return (
             <div>
                 <div className="wrapper">
                     <div className="row">
                         <MaskedInput mask="11.11.1111" name="expiry" placeholder="DD.MM.YYYY"
                                      onChange={::this.changeDate}/>
+                    </div>
+                    <div className="row">
+                        <span>{user.state}</span>
+                        <span>
+                            {user.state ? user.progress : ''}
+                        </span>
                     </div>
                     <div className="row">
                         http://r.revolut/<span>capricorn</span>/<span>{this.getUserName()}</span>
