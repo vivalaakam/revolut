@@ -125,14 +125,14 @@ function getUser(state) {
 }
 
 
-export function* checkUser() {
+function* checkUser() {
     let user = yield select(getUser);
     if (user.birthday && user.username && user.username !== user.prev_username) {
         yield call(fetchToken, user);
     }
 }
 
-export function* updateBirthday({payload}) {
+function* updateBirthday({payload}) {
     if (!(/_/g).test(payload.date)) {
         let error = validators.birthday(payload.date);
         if (!error) {
@@ -144,7 +144,7 @@ export function* updateBirthday({payload}) {
     }
 }
 
-export function* updateUsername({payload}) {
+function* updateUsername({payload}) {
     if (payload.username !== '') {
         let error = validators.username(payload.username);
         if (!error) {
@@ -157,7 +157,7 @@ export function* updateUsername({payload}) {
     }
 }
 
-export function* updatePhone({payload}) {
+function* updatePhone({payload}) {
     var error = validators.phone(payload.phone);
     if (!error) {
         yield put(updateUser({phone: payload.phone}));
@@ -166,13 +166,12 @@ export function* updatePhone({payload}) {
     }
 }
 
-export function* resetErrors({payload}) {
+function* resetErrors({payload}) {
     yield Object.keys(payload).map(key => put(resetError(key)))
 }
 
-export function* submit() {
+function* submit() {
     let user = yield select(getUser);
-    console.log(user);
     let state = true;
 
     let blank = yield FIELDS.map(key => !user[key] ? put(setError({[key]: 'Cannot be blank'})) : false)
@@ -188,14 +187,12 @@ export function* submit() {
 
     state = state && !valid.length;
 
-    console.log(user , state);
-
     if (state && user.can_login === 'success') {
         yield call(submitData, user);
     }
 }
 
-export function* fetchAstrosign(birthday) {
+function* fetchAstrosign(birthday) {
     let {astrosign} = yield fetch(`/astrosign/`, {
         method: "POST",
         headers: {
@@ -207,7 +204,7 @@ export function* fetchAstrosign(birthday) {
     yield put(updateUser({astrosign}));
 }
 
-export function* fetchToken(user) {
+function* fetchToken(user) {
     yield put(updateUser({can_login: 'in_progress'}));
     let {token} = yield fetch(`/${user.astrosign}/${user.username}`).then(data => data.json());
     yield put(updateUser({prev_username: user.username}))
@@ -215,7 +212,6 @@ export function* fetchToken(user) {
 }
 
 function* submitData(data) {
-    console.log(data);
     let resp = yield fetch(`/${data.astrosign}/${data.username}`, {
         method: "POST",
         headers: {
