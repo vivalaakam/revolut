@@ -162,7 +162,7 @@ html, body, #root {
   position: relative;
   padding: 48px 0px;
   margin-bottom: 340px;
-
+  height: 572px;
   &:after {
     content: '';
     position: absolute;
@@ -222,4 +222,31 @@ html, body, #root {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.Success {
+  position: relative;
+  height:100%;
+  &:after {
+    content: '';
+    position: absolute;
+    width: 182px;
+    height: 160px;
+    background: url('../images/car.png');
+    left: 50%;
+    bottom: 95px;
+    margin-left: -91px;
+  }
+}
+
+.Success__title {
+  text-align: center;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 36px;
+}
+
+.Success_text {
+  padding: 0px 190px;
+  text-align: center;
 }

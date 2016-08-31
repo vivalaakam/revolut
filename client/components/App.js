@@ -41,6 +41,47 @@ export default class App extends Component {
         actions.submitUser(user);
     }
 
+    formEntry() {
+        return (
+            <div>
+                <div className="Row Text">
+                    Fill in the registration form
+                </div>
+                <div className="Row">
+                    <Input name="firstName" onChange={::this.updateUser} placeholder="First Name"
+                           error={this.getError('firstName')}/>
+                </div>
+                <div className="Row">
+                    <Input name="lastName" onChange={::this.updateUser} placeholder="Last Name"
+                           error={this.getError('lastName')}/>
+                </div>
+                <div className="Row">
+                    <Input name="username" onChange={::this.changeUsername} placeholder="Username"
+                           error={this.getError('username')}/>
+                </div>
+                <div className="Row">
+                    <Input name="phone" onChange={::this.changePhone} placeholder="Phone No"
+                           error={this.getError('phone')}/>
+                </div>
+                <div className="Row">
+                    <button className="Submit" onClick={::this.submit}>
+                        Submit
+                    </button>
+                </div>
+            </div>
+        )
+    }
+
+    formSuccess() {
+        return (
+            <div className="Success">
+                <h3 className="Success__title">Great!</h3>
+                <p className="Success_text">We’ll contact you on delivery
+                    details as soon as possible</p>
+            </div>
+        )
+    }
+
     render() {
         const {user} = this.props;
         const state = classnames('State', {
@@ -81,30 +122,7 @@ export default class App extends Component {
                         </div>
                     </div>
                     <div className="Form">
-                        <div className="Row Text">
-                            Fill in the registration form
-                        </div>
-                        <div className="Row">
-                            <Input name="firstName" onChange={::this.updateUser} placeholder="First Name"
-                                   error={this.getError('firstName')}/>
-                        </div>
-                        <div className="Row">
-                            <Input name="lastName" onChange={::this.updateUser} placeholder="Last Name"
-                                   error={this.getError('lastName')}/>
-                        </div>
-                        <div className="Row">
-                            <Input name="username" onChange={::this.changeUsername} placeholder="Username"
-                                   error={this.getError('username')}/>
-                        </div>
-                        <div className="Row">
-                            <Input name="phone" onChange={::this.changePhone} placeholder="Phone No"
-                                   error={this.getError('phone')}/>
-                        </div>
-                        <div className="Row">
-                            <button className="Submit" onClick={::this.submit}>
-                                Submit
-                            </button>
-                        </div>
+                        {user.state === 'success' ? this.formSuccess() : this.formEntry() }
                     </div>
                 </div>
                 <div className="Container-back">
