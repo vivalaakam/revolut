@@ -23,7 +23,7 @@ export default class App extends Component {
     }
 
     checkUser() {
-        this.props.actions.check();
+        this.props.actions.checkForm();
     }
 
     getUserName() {
@@ -41,13 +41,13 @@ export default class App extends Component {
     }
 
     getError(field) {
-        return this.props.user.errors[field] || false;
+        return this.props.error[field] || false;
     }
 
     submit(e) {
         e.preventDefault();
         let {actions} = this.props;
-        actions.submitUser();
+        actions.submitForm();
     }
 
     formEntry() {
@@ -93,11 +93,11 @@ export default class App extends Component {
     }
 
     render() {
-        const {user} = this.props;
+        const {user, form} = this.props;
         const state = classnames('State', {
-            State_inProgress: user.can_login === 'in_progress',
-            State_success: user.can_login === 'success',
-            State_failure: user.can_login === 'failure'
+            State_inProgress: form.can_login === 'in_progress',
+            State_success: form.can_login === 'success',
+            State_failure: form.can_login === 'failure'
         });
 
         return (
@@ -129,11 +129,11 @@ export default class App extends Component {
                     </div>
                     <div className="Row Progress">
                         <div className={state}>
-                            {user.can_login && user.can_login === 'in_progress' ? user.progress : ''}
+                            {form.can_login && form.can_login === 'in_progress' ? form.progress : ''}
                         </div>
                     </div>
                     <div className="Form">
-                        {user.state === 'saved' ? this.formSuccess() : this.formEntry() }
+                        {form.state === 'saved' ? this.formSuccess() : this.formEntry() }
                     </div>
                 </div>
                 <div className="Container-back">

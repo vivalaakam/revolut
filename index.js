@@ -49,7 +49,7 @@ function incProgress(init) {
         }
 
         incProgress();
-    }, Math.random() * 2000);
+    }, Math.random() * 1000);
 }
 
 app.get('/', function (req, res) {

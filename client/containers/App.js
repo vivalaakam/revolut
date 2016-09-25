@@ -3,24 +3,27 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import AppWidget from '../components/App';
 import * as userActions from '../reducers/user';
+import * as formActions from '../reducers/form';
+
 @connect(
     state => ({
-        user: state.user
+        user: state.user,
+        error: state.error,
+        form: state.form
     }),
     dispatch => ({
-        actions: bindActionCreators(userActions, dispatch)
+        actions: bindActionCreators({...userActions, ...formActions}, dispatch)
     })
 )
 export default class App extends Component {
 
     static propTypes = {};
 
-
     render() {
-        const {user, actions, dispatch} = this.props;
+        const {user, error, form, actions, dispatch} = this.props;
 
         return (
-            <AppWidget {...{user, actions, dispatch}} />
+            <AppWidget {...{user, error, form, actions, dispatch}} />
         );
     }
 }

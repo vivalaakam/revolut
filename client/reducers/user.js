@@ -1,5 +1,7 @@
 import {put, call, select} from 'redux-saga/effects';
 import {takeEvery, delay} from 'redux-saga';
+import {createAction} from 'redux-actions';
+import {setError, resetError} from './error';
 
 import moment from 'moment';
 
@@ -22,12 +24,8 @@ const $$initialState = {
     firstName: '',
     lastName: '',
     phone: '',
-    can_login: null,
     prev_username: '',
-    state: 'new',
-    progress: 0,
-    astrosign: '',
-    errors: {}
+    astrosign: ''
 };
 
 export default function user(state = $$initialState, action) {
@@ -37,81 +35,24 @@ export default function user(state = $$initialState, action) {
                 ...state,
                 ...action.payload
             };
-        case SET_ERROR:
-            let errors = {...state.errors, ...action.payload};
-
-            return {
-                ...state,
-                errors
-            };
-
-        case RESET_ERROR:
-            delete state.errors[action.payload];
-            return {
-                ...state
-            };
         default:
             return state
     }
 }
 
+const setBirthday = createAction(SET_BIRTHDAY);
+const setUsername = createAction(SET_USERNAME);
+const setPhone = createAction(SET_PHONE);
+const updateUser = createAction(UPDATE_USER);
+const check = createAction(CHECK_USER);
 
-export function setBirthday(date) {
-    return {
-        type: SET_BIRTHDAY,
-        payload: {
-            date
-        }
-    }
-}
 
-export function setUsername(username) {
-    return {
-        type: SET_USERNAME,
-        payload: {
-            username
-        }
-    }
-}
-
-export function updateUser(data) {
-    return {
-        type: UPDATE_USER,
-        payload: data
-    }
-}
-
-export function setPhone(phone) {
-    return {
-        type: SET_PHONE,
-        payload: {phone}
-    }
-}
-
-export function setError(error) {
-    return {
-        type: SET_ERROR,
-        payload: error
-    }
-}
-
-export function resetError(field) {
-    return {
-        type: RESET_ERROR,
-        payload: field
-    }
-}
-
-export function submitUser() {
-    return {
-        type: SUBMIT_USER
-    }
-}
-
-export function check() {
-    return {
-        type: CHECK_USER
-    }
+export {
+    setBirthday,
+    setUsername,
+    setPhone,
+    updateUser,
+    check
 }
 
 const validators = {
@@ -120,24 +61,16 @@ const validators = {
     phone: phone => (/^[0-9]+$/gi).test(phone) ? false : {phone: 'Invalid phone no'}
 };
 
-function getUser(state) {
+export function getUser(state) {
     return state.user
 }
 
-
-function* checkUser() {
-    let user = yield select(getUser);
-    if (user.birthday && user.username && user.username !== user.prev_username) {
-        yield call(fetchToken, user);
-    }
-}
-
 function* updateBirthday({payload}) {
-    if (!(/_/g).test(payload.date)) {
-        let error = validators.birthday(payload.date);
+    if (!(/_/g).test(payload)) {
+        let error = validators.birthday(payload);
         if (!error) {
-            yield put(updateUser({birthday: payload.date}));
-            yield call(fetchAstrosign, payload.date);
+            yield put(updateUser({birthday: payload}));
+            yield call(fetchAstrosign, payload);
         } else {
             yield put(setError(error))
         }
@@ -145,22 +78,22 @@ function* updateBirthday({payload}) {
 }
 
 function* updateUsername({payload}) {
-    if (payload.username !== '') {
-        let error = validators.username(payload.username);
+    if (payload !== '') {
+        let error = validators.username(payload);
         if (!error) {
-            yield put(updateUser({username: payload.username}));
+            yield put(updateUser({username: payload}));
         } else {
             yield put(setError(error))
         }
     } else {
-        yield put(updateUser({username: payload.username}));
+        yield put(updateUser({username: payload}));
     }
 }
 
 function* updatePhone({payload}) {
-    var error = validators.phone(payload.phone);
+    var error = validators.phone(payload);
     if (!error) {
-        yield put(updateUser({phone: payload.phone}));
+        yield put(updateUser({phone: payload}));
     } else {
         yield put(setError(error))
     }
@@ -168,28 +101,6 @@ function* updatePhone({payload}) {
 
 function* resetErrors({payload}) {
     yield Object.keys(payload).map(key => put(resetError(key)))
-}
-
-function* submit() {
-    let user = yield select(getUser);
-    let state = true;
-
-    let blank = yield FIELDS.map(key => !user[key] ? put(setError({[key]: 'Cannot be blank'})) : false)
-        .filter(val => val);
-
-    state = state && !blank.length;
-
-    let valid = yield Object.keys(validators).map(field => {
-        let error = validators[field](user[field]);
-        return error && put(setError(error));
-
-    }).filter(val => val);
-
-    state = state && !valid.length;
-
-    if (state && user.can_login === 'success') {
-        yield call(submitData, user);
-    }
 }
 
 function* fetchAstrosign(birthday) {
@@ -204,40 +115,23 @@ function* fetchAstrosign(birthday) {
     yield put(updateUser({astrosign}));
 }
 
-function* fetchToken(user) {
-    yield put(updateUser({can_login: 'in_progress'}));
-    let {token} = yield fetch(`/${user.astrosign}/${user.username}`).then(data => data.json());
-    yield put(updateUser({prev_username: user.username}))
-    yield call(progressCheck, token, user)
+export function* getBlank() {
+    let user = yield select(getUser);
+    let blank = yield FIELDS.map(key => !user[key] ? put(setError({[key]: 'Cannot be blank'})) : false)
+        .filter(val => val);
+
+    return blank;
 }
 
-function* submitData(data) {
-    let resp = yield fetch(`/${data.astrosign}/${data.username}`, {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    }).then(data => data.json());
+export function* getValid() {
+    let user = yield select(getUser);
+    let valid = yield Object.keys(validators).map(field => {
+        let error = validators[field](user[field]);
+        return error && put(setError(error));
 
-    yield put(updateUser(resp));
-}
+    }).filter(val => val);
 
-function* progressCheck(token, user) {
-    let {progress, available} = yield fetch(`/${user.astrosign}/${user.username}?token=${token}`).then(data => data.json());
-
-    if (progress === 100) {
-        yield put(updateUser({progress: progress, can_login: available ? 'success' : 'failure'}));
-    } else {
-        yield put(updateUser({progress: progress}));
-        yield delay(1000 * Math.random());
-        yield call(progressCheck, token, user)
-    }
-}
-
-export function* watchSubmitUser() {
-    yield* takeEvery(SUBMIT_USER, submit);
+    return valid;
 }
 
 export function* watchUser() {
@@ -256,6 +150,3 @@ export function* watchPhone() {
     yield* takeEvery(SET_PHONE, updatePhone);
 }
 
-export function* watchCheckUser() {
-    yield * takeEvery(CHECK_USER, checkUser);
-}

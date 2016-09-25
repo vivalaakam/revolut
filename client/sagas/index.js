@@ -1,4 +1,5 @@
-import {watchBirthday, watchUsername, watchPhone, watchUser, watchSubmitUser, watchCheckUser} from '../reducers/user';
+import {watchBirthday, watchUsername, watchPhone, watchUser} from '../reducers/user';
+import {watchCheckUser, watchSubmitUser} from '../reducers/form';
 
 export default function* rootSaga() {
     yield [
