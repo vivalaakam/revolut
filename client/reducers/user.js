@@ -65,6 +65,11 @@ export function getUser(state) {
     return state.user
 }
 
+export function* canCheckUser() {
+    let user = yield select(getUser);
+    return user.birthday && user.username && user.username !== user.prev_username;
+}
+
 function* updateBirthday({payload}) {
     if (!(/_/g).test(payload)) {
         let error = validators.birthday(payload);

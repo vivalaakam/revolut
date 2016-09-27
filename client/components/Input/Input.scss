@@ -1,0 +1,15 @@
+.Input {
+  padding: 16px 36px;
+  border-radius: 27px;
+  border: 1px solid #191C1F;
+  display: inline-block;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.Error {
+  border-color: tomato;
+}

@@ -1,7 +1,7 @@
 import {put, call, select} from 'redux-saga/effects';
 import {takeEvery, delay} from 'redux-saga';
 import {createAction} from 'redux-actions';
-import {getUser, getBlank, getValid, updateUser} from './user';
+import {getUser, canCheckUser, getBlank, getValid, updateUser} from './user';
 
 const UPDATE_FORM = 'form/UPDATE_FORM';
 const CHECK_FORM = 'form/CHECK_FORM';
@@ -35,16 +35,17 @@ export function getForm(state) {
 }
 
 function* checkUser() {
-    let user = yield select(getUser);
-    if (user.birthday && user.username && user.username !== user.prev_username) {
-        yield call(fetchToken, user);
+    let user = yield call(canCheckUser);
+    if (user) {
+        yield call(fetchToken);
     }
 }
 
-function* fetchToken(user) {
+function* fetchToken() {
+    let user = yield select(getUser);
     yield put(updateForm({can_login: 'in_progress'}));
     let {token} = yield fetch(`/${user.astrosign}/${user.username}`).then(data => data.json());
-    yield put(updateUser({prev_username: user.username}))
+    yield put(updateUser({prev_username: user.username}));
     yield call(progressCheck, token, user)
 }
 
