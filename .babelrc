@@ -7,12 +7,13 @@
   ],
   "env": {
     "development": {
-      "presets": [
-        "react-hmre"
+      "plugins": [
+        "react-hot-loader/babel"
       ]
     }
   },
   "plugins": [
+    "add-module-exports",
     "transform-decorators-legacy",
     "transform-runtime"
   ]
